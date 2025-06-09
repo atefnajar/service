@@ -1,0 +1,120 @@
+scalar DateTime
+
+type User {
+    id: ID!
+    email: String!
+    name: String!
+    role: UserRole!
+    createdAt: DateTime!
+}
+
+type Space {
+    id: ID!
+    name: String!
+    type: SpaceType!
+    capacity: Int!
+    description: String
+    amenities: [String!]!
+    hourlyRate: Float!
+    isActive: Boolean!
+    createdAt: DateTime!
+}
+
+type Reservation {
+    id: ID!
+    user: User!
+    space: Space!
+    startTime: DateTime!
+    endTime: DateTime!
+    status: ReservationStatus!
+    notes: String
+    totalCost: Float!
+    createdAt: DateTime!
+}
+
+enum UserRole {
+    USER
+    ADMIN
+}
+
+enum SpaceType {
+    DESK
+    MEETING_ROOM
+    PRIVATE_OFFICE
+}
+
+enum ReservationStatus {
+    CONFIRMED
+    CANCELLED
+    COMPLETED
+}
+
+input CreateUserInput {
+    email: String!
+    password: String!
+    name: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+input CreateSpaceInput {
+    name: String!
+    type: SpaceType!
+    capacity: Int!
+    description: String
+    amenities: [String!]!
+    hourlyRate: Float!
+}
+
+input CreateReservationInput {
+    spaceId: ID!
+    startTime: DateTime!
+    endTime: DateTime!
+    notes: String
+}
+
+input UpdateReservationStatusInput {
+    reservationId: ID!
+    status: ReservationStatus!
+}
+
+type AuthPayload {
+    token: String!
+    user: User!
+}
+
+type Query {
+    # User queries
+    me: User
+    users: [User!]!
+    
+    # Space queries
+    spaces: [Space!]!
+    space(id: ID!): Space
+    availableSpaces(startTime: DateTime!, endTime: DateTime!): [Space!]!
+    
+    # Reservation queries
+    reservations: [Reservation!]!
+    myReservations: [Reservation!]!
+    reservation(id: ID!): Reservation
+    spaceReservations(spaceId: ID!, date: String!): [Reservation!]!
+}
+
+type Mutation {
+    # Auth mutations
+    register(input: CreateUserInput!): AuthPayload!
+    login(input: LoginInput!): AuthPayload!
+    
+    # Space mutations (admin only)
+    createSpace(input: CreateSpaceInput!): Space!
+    updateSpace(id: ID!, input: CreateSpaceInput!): Space!
+    deleteSpace(id: ID!): Boolean!
+    
+    # Reservation mutations
+    createReservation(input: CreateReservationInput!): Reservation!
+    updateReservationStatus(input: UpdateReservationStatusInput!): Reservation!
+    cancelReservation(id: ID!): Reservation!
+}
