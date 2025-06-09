@@ -114,7 +114,8 @@ type Mutation {
     deleteSpace(id: ID!): Boolean!
     
     # Reservation mutations
-    createReservation(input: CreateReservationInput!): Reservation!
+    RegisterUser(input: CreateReservationInput!): Reservation!
     updateReservationStatus(input: UpdateReservationStatusInput!): Reservation!
     cancelReservation(id: ID!): Reservation!
 }
+

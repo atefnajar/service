@@ -11,7 +11,7 @@ import java.util.Arrays;
     
 @Component
 public class DataInitializer implements CommandLineRunner {
-    
+    //////////////////////////////////////////////////////////////////kkk
     @Autowired
     private UserRepository userRepository;
     
